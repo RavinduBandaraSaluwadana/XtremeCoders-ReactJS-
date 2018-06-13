@@ -2,8 +2,10 @@
 
 import React, {Component} from 'react';
 import AddPatient from '../Controllers/AddPatient';
+import Patient from '../Modules/Patient';
 import Patients  from '../Modules/Patients';
 import ViewPatient from '../Controllers/ViewPatient';
+import AdmittPatient from '../Controllers/AdmittPatient';
 import axios from 'axios';
 import Base from '../APIspecs';
 
@@ -14,6 +16,7 @@ export default class RegistrationView extends Component{
             patients: [],
             view: false
         }
+        this.getAllPatients= this.getAllPatients.bind(this);
         this.getAllPatients();
         this.patient = null;
     }
@@ -40,18 +43,8 @@ export default class RegistrationView extends Component{
         })
     }
 
-    viewPatient(id) {
-        console.log("inside view")
-        axios.get(Base.nodeAPI + '/patient/' + id).then(results => {
-            this.patient = results.data[0];
-            console.log(results.data[0]);
-            this.setState({
-                view: true
-            })
-        }).catch(err => {
-            alert(err);
-        })
-    }
+
+
 
     render() {
         if(this.state.view){
@@ -60,7 +53,7 @@ export default class RegistrationView extends Component{
                     <h2>Patient Registration details</h2>
                 </div>
                 <div className="container">
-                    <ViewPatient patient={this.patient}/>
+                    <Patient/>
                 </div>
             </div>
 
@@ -72,7 +65,7 @@ export default class RegistrationView extends Component{
                 </div>
                 <div className="container">
                     <AddPatient addPatient={patient => this.addPatient(patient)}/>
-                    <Patients patients={this.state.patients} getAllPatients={() => this.getAllPatients()} viewPatient={patient => this.viewPatient(patient._id || patient.id)}/>
+                    <Patients patients={this.state.patients} getAllPatients={() => this.getAllPatients()}/>
                 </div>
             </div>;
         }

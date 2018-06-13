@@ -56,6 +56,7 @@ export default class AddPatient extends Component{
 
     render(){
         return <div>
+            <legend>Patient registration</legend>
             <form onSubmit={event => this.onSubmit(event)}>
                 <table>
                     <tr>
