@@ -3,7 +3,6 @@
 import React, {Component} from 'react';
 import PropTypes          from 'prop-types';
 import Patient            from './Patient.jsx';
-import SearchBar from './SearchBar';
 import axios from "axios/index";
 import Base from "../APIspecs";
 
