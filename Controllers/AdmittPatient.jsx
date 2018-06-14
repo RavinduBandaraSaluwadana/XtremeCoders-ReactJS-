@@ -9,17 +9,20 @@ export default class AdmittPatient extends Component{
     static get propTypes(){
         return({
             id: PropTypes.number,
-            patient: PropTypes.object
+            patient: PropTypes.object,
+            beds: PropTypes.array
         })
     }
     constructor(props){
         super(props);
         this.id = this.props.id;
         this.patient = this.props.patient;
-        // this.state ={
-        //     patient: null
-        // }
-        console.log(this.id);
+        this.update= this.props.update;
+        this.state ={
+            status: this.props.patient.status,
+            beds: []
+        }
+        //console.log(this.id);
         this.modalname = "myModal"+this.id;
         this.target = "#myModal"+this.id
         //this.getPatient(this.props.id);
@@ -61,6 +64,12 @@ export default class AdmittPatient extends Component{
         this.contactNo = event.target.value;
     }
 
+    onBedNoChange(event){
+        event.preventDefault();
+        event.stopPropagation();
+        this.bedNo = event.target.value()
+    }
+
     // getPatient(id){
     //     axios.get(Base.nodeAPI+"/patient/"+id).then(result =>{
     //         if(result.status == 200){
@@ -75,14 +84,45 @@ export default class AdmittPatient extends Component{
     //     })
     // }
 
+    componentDidMount(){
+        axios.get(Base.nodeAPI+"/bed/?availability=true").then(res => {
+            //console.log(res);
+            if(res.data.length !== 0){
+                this.setState({
+                    beds: res.data.data || res.data
+                })
+                this.bedNo = this.state.beds[0].bedNo;
+            }
+        }).catch(err => {
+            alert(err);
+        })
+    }
+
+    updateBedAvailability(id, bedNo){
+        let bed = {
+            availability: false,
+            patientNo: id
+        }
+        axios.put(Base.nodeAPI+"/bed/"+bedNo, bed).then(res => {
+            console.log(res);
+        }).catch(err => {
+            alert(err);
+        })
+    }
+
     admitPatient(id, patient){
         axios.put(Base.nodeAPI+"/patient/"+id,patient).then(res =>{
             if(res.status == 200){
                 //console.log(res);
+                this.updateBedAvailability(this.id, this.bedNo);
+                this.update(id);
                 axios.get(Base.nodeAPI+"/patient/"+id).then(result =>{
                     if(result.status == 200){
                         //console.log(result);
                         alert("Patient AdmissionNo: "+ result.data[0].admissionNo);
+                        $(".close").trigger('click');
+                        //$(this.target).hide();
+                        this.setState({status: result.data[0].status})
                     }
                 }).catch(err => {
                     alert(err);
@@ -98,25 +138,31 @@ export default class AdmittPatient extends Component{
         event.stopPropagation();
         //var old = null;
         console.log(this.id);
-        var today = new Date();
-        var admission = today.getFullYear()+150+this.id;
-        var patientInstance = {
-            name: this.patient.name || this.name,
-            age: this.patient.age || this.age,
-            issue: this.patient.issue || this.issue,
-            priorityLevel: this.patient.priorityLevel,
-            status: "admitted",
-            admittedDate: this.patient.admittedDate,
-            address: this.address,
-            admittedBy: this.admittedBy,
-            contactNo: this.contactNo,
-            admissionNo: admission
-        };
-        this.admitPatient(this.id, patientInstance);
+        if(this.contactNo.match(/^\d{10}$/)){
+            var today = new Date();
+            var admission = today.getFullYear()+150+this.id;
+            var patientInstance = {
+                name: this.patient.name || this.name,
+                age: this.patient.age || this.age,
+                issue: this.patient.issue || this.issue,
+                priorityLevel: this.patient.priorityLevel,
+                status: "admitted",
+                admittedDate: today,
+                address: this.address,
+                admittedBy: this.admittedBy,
+                contactNo: this.contactNo,
+                admissionNo: admission
+            };
+            this.admitPatient(this.id, patientInstance);
+        } else{
+            alert("Please enter a valid contact number!");
+        }
+
+
     }
 
     render(){
-        if(this.patient.status == "admitted"){
+        if(this.state.status == "admitted"){
             return <div>
                 <button type="button" class="btn btn-info" disabled>
                     Admit Patient
@@ -162,12 +208,23 @@ export default class AdmittPatient extends Component{
                                             <td><label> Contact No: </label></td>
                                             <td><input type="text" onChange={event => this.onContactNoChange(event)}/></td>
                                         </tr>
+                                        <tr>
+                                            <td><label> Bed No: </label></td>
+                                            <td>
+                                                <select onChange={event => this.onBedNoChange(event)}>{
+                                                this.state.beds.map(bed => {
+                                                        let bedNo = bed.bedNo.toString();
+                                                        return <option value={bedNo}>{bedNo}</option>
+                                                    })
+                                                }</select>
+                                            </td>
+                                        </tr>
                                     </table>
                                     <button type="submit" className="btn btn-danger">Admit</button>
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                <button id="close" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>

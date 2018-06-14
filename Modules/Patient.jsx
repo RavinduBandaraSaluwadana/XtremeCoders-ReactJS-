@@ -20,11 +20,14 @@ export default class Patient extends Component{
     constructor(props){
         super(props);
         this.state = {
-            update: false
+            update: false,
+            patient: this.props.patient,
+            patientId: this.props.patient._id
         }
-        this.patient = this.props.patient;
+        //this.patient = this.props.patient;
         this.getAllPatients = this.props.getAllPatients;
-        this.returnBack = this.returnBack.bind(this);
+        this.getPatient = this.getPatient.bind(this);
+        //this.returnBack = this.returnBack.bind(this);
         //this.action = this.props.view;
         //console.log(this.action);
         //this.viewPatient = this.props.viewPatient;
@@ -44,7 +47,9 @@ export default class Patient extends Component{
         axios.get(Base.nodeAPI+'/patient/'+id).then(results =>{
             if(results.status == 200){
                 console.log("inside get");
-                this.patient = results.data[0];
+                this.setState({patient: results.data[0]});
+                this.props.stateHandler();
+                //this.patient = results.data[0];
                 console.log(results.data[0]);
                 // this.setState({
                 //     view: false
@@ -55,53 +60,57 @@ export default class Patient extends Component{
         })
     }
 
+    refreshDeleted(){
+        this.setState({patient: null});
+    }
     delete(id){
         axios.delete(Base.nodeAPI+'/patient/'+id).then(results =>{
             console.log("inside delete");
-            this.refreshHandler();
+            this.getAllPatients();
+            //this.refreshDeleted();
+            //this.refreshHandler();
         }).catch(err =>{
             alert(err);
         })
     }
 
-    returnBack(){
-        this.getPatient(this.patient._id);
-    }
+    // returnBack(){
+    //     this.getPatient(this.patient._id);
+    // }
 
-    viewPatient(id) {
-        console.log("inside view");
-        if(this.patient.status != "admitted"){
-            axios.get(Base.nodeAPI + '/patient/' + id).then(results => {
-                this.patient = results.data[0];
-                console.log(results.data[0]);
-                //this.props.view();
-                this.setState({
-                    view: true
-                });
-            }).catch(err => {
-                alert(err);
-            })
-        }
-
-    }
+    // viewPatient(id) {
+    //     console.log("inside view");
+    //     if(this.patient.status != "admitted"){
+    //         axios.get(Base.nodeAPI + '/patient/' + id).then(results => {
+    //             this.patient = results.data[0];
+    //             console.log(results.data[0]);
+    //             //this.props.view();
+    //             this.setState({
+    //                 view: true
+    //             });
+    //         }).catch(err => {
+    //             alert(err);
+    //         })
+    //     }
+    //
+    // }
 
 
     render(){
-        if(this.state.view){
-            return <ViewPatient patient={this.patient} action={this.returnBack}/>
-        }
-        else{
+        if(this.state.patient != null){
             return <tr>
-                <td>{this.patient._id || this.patient.id}</td>
-                <td>{this.patient.name}</td>
-                <td>{this.patient.age}</td>
-                <td>{this.patient.issue}</td>
-                <td>{this.patient.priorityLevel}</td>
-                <td>{this.patient.status}</td>
-                <td><AdmittPatient patient={this.patient} id={this.patient._id||this.patient.id}/></td>
-                <td><button class="btn btn-info" onClick={(event)=> this.delete(this.patient._id )}>Delete</button></td>
+                <td>{this.state.patient._id || this.state.patient.id}</td>
+                <td>{this.state.patient.name}</td>
+                <td>{this.state.patient.age}</td>
+                <td>{this.state.patient.issue}</td>
+                <td>{this.state.patient.priorityLevel}</td>
+                <td>{this.state.patient.status}</td>
+                <td><AdmittPatient patient={this.state.patient} id={this.state.patient._id||this.state.patientId} update={this.getPatient}/></td>
             </tr>
         }
+
+
+
 
     }
 }

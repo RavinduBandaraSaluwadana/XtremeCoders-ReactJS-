@@ -46,7 +46,7 @@ export default class AddPatient extends Component{
         event.preventDefault();
         event.stopPropagation();
         if(this.name && this.age && this.issue){
-            console.log('blaaaa');
+            //console.log('blaaaa');
             this.props.addPatient({name: this.name,  age: this.age, issue: this.issue, priorityLevel: this.priorityLevel});
             this.issue = "";
             this.age = "";
@@ -75,6 +75,7 @@ export default class AddPatient extends Component{
                         <td><label>Condition: </label></td>
                         <td>
                             <select name="level" onChange={event => this.onLevelChange(event)}>
+                                <option value="">Select..</option>
                                 <option value="critical">critical</option>
                                 <option value="major">major</option>
                                 <option value="medium">medium</option>

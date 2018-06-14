@@ -9,7 +9,7 @@ import Base from "../APIspecs";
 export default class Patients extends Component{
     static get propTypes(){
         return {
-            patients: PropTypes.array,
+            patients: PropTypes.array
             //view: PropTypes.func
         }
     }
@@ -17,9 +17,10 @@ export default class Patients extends Component{
     constructor(props){
         super(props);
         this.state = {
-            view: false
+            key: ""
         }
-        this.viewDetails = this.viewDetails.bind(this);
+        this.stateHandler = this.stateHandler.bind(this);
+        //this.viewDetails = this.viewDetails.bind(this);
         //this.view = this.props.view;
         //console.log(this.view);
     }
@@ -28,27 +29,36 @@ export default class Patients extends Component{
         this.setState(props)
     }
 
+    stateHandler(){
+        this.props.getAllPatients();
+    }
 
+    // viewDetails(e){
+    //     console.log(this.state.view);
+    //     e.preventDefault();
+    //     this.setState({
+    //         view: true
+    //     });
+    //
+    // }
 
-    viewDetails(e){
-        console.log(this.state.view);
-        e.preventDefault();
-        this.setState({
-            view: true
-        });
-
+    onSearchChange(event){
+        event.preventDefault();
+        event.stopPropagation();
+        this.setState({key:event.target.value });
+        //this.searchKey = event.target.value;
     }
 
     // searchFunc(){
     //     var input, filter, table, tr, td, i;
-    //     input = document.getElementById("myInput");
-    //     filter = input.value.toUpperCase();
-    //     table = document.getElementById("myTable");
-    //     tr = table.getElementsByTagName("tr");
+    //     //input = document.getElementById("myInput");
+    //     filter = this.searchKey;
+    //
+    //     tr = table.getElementsByTagName("Patient");
     //     for (i = 0; i < tr.length; i++) {
     //         td = tr[i].getElementsByTagName("td")[1];
     //         if (td) {
-    //             if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+    //             if (td.innerHTML.indexOf(filter) > -1) {
     //                 tr[i].style.display = "";
     //             } else {
     //                 tr[i].style.display = "none";
@@ -56,6 +66,7 @@ export default class Patients extends Component{
     //         }
     //     }
     // }
+
 
 
 
@@ -68,7 +79,7 @@ export default class Patients extends Component{
         }
         else{
             return <div>
-                <input type="text" id="myInput" placeholder="Search for names.." title="Type in a name"/>
+                <input type="text" onChange={event => this.onSearchChange(event)} placeholder="Search for names.." title="Type in a name"/>
                 <table className="table" id="myTable">
                     <thead>
                     <tr>
@@ -83,7 +94,13 @@ export default class Patients extends Component{
                     <tbody>
                     {
                         this.patients.map(patient => {
-                            return <Patient key={patient._id || patient.id} patient ={patient} getAllPatients={()=> this.props.getAllPatients} view={this.props.view}/>
+                            let searchkey = new RegExp(this.state.key, "gi");
+                            if(this.state.key === ""){
+                                return <Patient key={patient._id || patient.id} patient ={patient} getAllPatients={()=> this.props.getAllPatients} stateHandler={this.stateHandler}/>
+                            } else if(patient.name.match(searchkey)){
+                                return <Patient key={patient._id || patient.id} patient ={patient} getAllPatients={()=> this.props.getAllPatients} stateHandler={this.stateHandler}/>
+                            }
+
                         })
                     }
                     </tbody>
