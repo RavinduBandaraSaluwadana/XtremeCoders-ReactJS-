@@ -9,36 +9,52 @@ import Home from './Home';
 import Navbar from './Navbar';
 import RegistrationView from './RegistrationView';
 import DoctorExamView from './DoctoExamView';
+import Login from '../Controllers/Login';
 
 export default class AppContainer extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            logedIn: false
+        }
+        this.logHandler = this.logHandler.bind(this);
+    }
+
+    logHandler(){
+        this.setState({
+            logedIn: true
+        })
     }
 
     render() {
-        return <div>
-            <Router>
-                <div>
+        if(this.state.logedIn){
+            return <div>
+                <Router>
                     <div>
-                        <Navbar/>
+                        <div>
+                            <Navbar/>
+                        </div>
+                        <Route exact path="/" render={props => {
+                            return <RegistrationView/>
+                        }}/>
+                        <Route path={"/discharge"} render={props => {
+                            return <DPatiants/>
+                        }}/>
+                        <Route path={"/search"} render={props =>{
+                            return <Search/>
+                        }}/>
+                        <Route path="/about" render={props => {
+                            return <About/>
+                        }}/>
+                        <Route path="/exams" render={props => {
+                            return <DoctorExamView/>
+                        }}/>
                     </div>
-                    <Route exact path="/" render={props => {
-                        return <RegistrationView/>
-                    }}/>
-                    <Route path={"/discharge"} render={props => {
-                        return <DPatiants/>
-                    }}/>
-                    <Route path={"/search"} render={props =>{
-                        return <Search/>
-                    }}/>
-                    <Route path="/about" render={props => {
-                        return <About/>
-                    }}/>
-                    <Route path="/exams" render={props => {
-                        return <DoctorExamView/>
-                    }}/>
-                </div>
-            </Router>
-        </div>;
+                </Router>
+            </div>;
+        }
+       else{
+            return <Login log={this.logHandler}/>
+        }
     }
 }
