@@ -79,7 +79,7 @@ export default class Patients extends Component{
         }
         else{
             return <div>
-                <input type="text" onChange={event => this.onSearchChange(event)} placeholder="Search for names.." title="Type in a name"/>
+                <input type="text" id="myInput" onChange={event => this.onSearchChange(event)} placeholder="Search for names.." title="Type in a name"/>
                 <table className="table" id="myTable">
                     <thead>
                     <tr>

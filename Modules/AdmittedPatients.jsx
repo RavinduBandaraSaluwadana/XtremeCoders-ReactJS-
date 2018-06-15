@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 import PropTypes from "prop-types";
 import axios from 'axios';
 import Base from '../APIspecs';
+import UpdateAdmission from '../Controllers/UpdateAdmission'
 
 export default class AdmittedPatients extends Component{
     constructor(props){
@@ -12,6 +13,7 @@ export default class AdmittedPatients extends Component{
             patients: [],
             key: ""
         }
+        this.getAdmittedPatients = this.getAdmittedPatients.bind(this);
         this.getAdmittedPatients();
     }
 
@@ -71,7 +73,7 @@ export default class AdmittedPatients extends Component{
                         <input id="date" type="date" onChange={event => this.onDateChange(event)}/>
                     </div>
                     <div class="col-sm-4">
-                        <input type="text" onChange={event => this.onSearchChange(event)} placeholder="Search for AddmissonNo.." title="Type the admission number"/>
+                        <input type="text" id="myInput" onChange={event => this.onSearchChange(event)} placeholder="Search for AddmissonNo.." title="Type the admission number"/>
                     </div>
                 </div>
                 <table className="table">
@@ -104,6 +106,7 @@ export default class AdmittedPatients extends Component{
                                     <td>{patient.admittedBy}</td>
                                     <td>{patient.contactNo}</td>
                                     <td>{patient.admissionNo}</td>
+                                    <td><UpdateAdmission id={patient._id} patient={patient} update={this.getAdmittedPatients}/></td>
                                 </tr>
                             }else if(pAdmissionNo.match(searchkey)){
                                 return <tr>
@@ -116,6 +119,7 @@ export default class AdmittedPatients extends Component{
                                     <td>{patient.admittedBy}</td>
                                     <td>{patient.contactNo}</td>
                                     <td>{patient.admissionNo}</td>
+                                    <td><UpdateAdmission id={patient._id} patient={patient} update={this.getAdmittedPatients}/></td>
                                 </tr>
                             }
                         })

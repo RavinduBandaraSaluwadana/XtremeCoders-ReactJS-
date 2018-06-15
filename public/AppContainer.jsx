@@ -7,6 +7,7 @@ import About from './About';
 import Home from './Home';
 import Navbar from './Navbar';
 import RegistrationView from './RegistrationView';
+import DoctorExamView from './DoctoExamView';
 
 export default class AppContainer extends Component {
     constructor(props) {
@@ -25,6 +26,9 @@ export default class AppContainer extends Component {
                     }}/>
                     <Route path="/about" render={props => {
                         return <About/>
+                    }}/>
+                    <Route path="/exams" render={props => {
+                        return <DoctorExamView/>
                     }}/>
                 </div>
             </Router>

@@ -211,7 +211,7 @@ export default class AdmittPatient extends Component{
                                         <tr>
                                             <td><label> Bed No: </label></td>
                                             <td>
-                                                <select onChange={event => this.onBedNoChange(event)}>{
+                                                <select onChange={event => this.onBedNoChange(event)} >{
                                                 this.state.beds.map(bed => {
                                                         let bedNo = bed.bedNo.toString();
                                                         return <option value={bedNo}>{bedNo}</option>
