@@ -10,6 +10,8 @@ import Navbar from './Navbar';
 import RegistrationView from './RegistrationView';
 import DoctorExamView from './DoctoExamView';
 import Login from '../Controllers/Login';
+import ManageShifts from './ManageShifts';
+import MedicalHistory from './MedicalHistory';
 
 export default class AppContainer extends Component {
     constructor(props) {
@@ -48,6 +50,12 @@ export default class AppContainer extends Component {
                         }}/>
                         <Route path="/exams" render={props => {
                             return <DoctorExamView/>
+                        }}/>
+                        <Route path="/shifts" render={props => {
+                            return <ManageShifts/>
+                        }}/>
+                        <Route path="/medical" render={props => {
+                            return <MedicalHistory/>
                         }}/>
                     </div>
                 </Router>

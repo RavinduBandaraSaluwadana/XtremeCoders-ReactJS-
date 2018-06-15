@@ -26,6 +26,12 @@ export default class Navbar extends Component{
                         <li className="nav-item">
                             <Link className="nav-link" to="/exams">Patient Examinations</Link>
                         </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/shifts">Manage Shifts</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to="/medical">Medical History</Link>
+                        </li>
                     </ul>
                 </div>
             </nav>
