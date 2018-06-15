@@ -1,0 +1,1 @@
+Add all the react components that handle modules like Patient to this folder
