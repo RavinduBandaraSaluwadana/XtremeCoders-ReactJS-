@@ -110,7 +110,6 @@ export default class Transfer extends Component{
                                 <th>Patient Age</th>
                                 <th>Admitted date</th>
                                 <th>Issue</th>
-                                <th>Tretements</th>
                             </tr>
                             <tbody>
                                 {this.patiant.map(item=>

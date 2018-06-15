@@ -67,6 +67,7 @@ export default class Discharge extends Component{
             })
 
             this.delete(id);
+            this.deleteBed(id);
         }).catch(err=>{
             alert(err);
         })
@@ -84,8 +85,16 @@ export default class Discharge extends Component{
 
     delete(id){
         axios.delete(Base.nodeAPI+'/patient/'+id).then(results =>{
+            alert("Deleted Patiant Record");
+        }).catch(err =>{
+            alert(err);
+        })
+    }
+
+    deleteBed(id){
+        axios.delete(Base.nodeAPI+'/bed/'+id).then(results =>{
             this.patiant;
-            alert("Deleted from Patiant table");
+            alert("Deallocate Bed");
         }).catch(err =>{
             alert(err);
         })
@@ -94,6 +103,8 @@ export default class Discharge extends Component{
     render(){
         this.patiant = this.props.allPatiants;
         var date = new Date();
+        var day = date.getDay();
+        var month = date.getMonth()+1;
         let SearchKey = new RegExp(this.state.key,"gi");
         return(
             <div>
@@ -114,7 +125,6 @@ export default class Discharge extends Component{
                                 <th> Admitted Date</th>
                                 <th> Discharged Date</th>
                                 <th> Issue</th>
-                                <th> Treatments</th>
                             </tr>
 
                             <tbody>
@@ -126,7 +136,7 @@ export default class Discharge extends Component{
                                             <td id={'pname'}>{item.name}</td>
                                             <td id={'age'}>{item.age}</td>
                                             <td id={'adate'}>{item.admittedDate}</td>
-                                            <td id={'ddate'}>{date.getFullYear()+"/"+date.getMonth()+"/"+date.getDay()}</td>
+                                            <td id={'ddate'}>{new Date().getFullYear()+"/"+month+"/"+new Date().getDate()}</td>
                                             <td id={'issue'}>{item.issue}</td>
                                             <td id={'treatements'}></td>
                                             <td><input type={"button"} className="btn btn-info" value={"Discharge"} onClick={()=>{this.addDischargePatiants(document.getElementById('pid').innerHTML,
