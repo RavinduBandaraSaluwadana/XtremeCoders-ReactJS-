@@ -2,7 +2,8 @@
 
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
-
+import Search from './SearchAllPatients';
+import DPatiants from './AllDischargePatiants';
 import About from './About';
 import Home from './Home';
 import Navbar from './Navbar';
@@ -23,6 +24,12 @@ export default class AppContainer extends Component {
                     </div>
                     <Route exact path="/" render={props => {
                         return <RegistrationView/>
+                    }}/>
+                    <Route path={"/discharge"} render={props => {
+                        return <DPatiants/>
+                    }}/>
+                    <Route path={"/search"} render={props =>{
+                        return <Search/>
                     }}/>
                     <Route path="/about" render={props => {
                         return <About/>
