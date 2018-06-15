@@ -18,10 +18,10 @@ export default class Navbar extends Component{
                             <a className="nav-link" href="/">Patient Registration <span class="sr-only">(current)</span></a>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/about">link2</Link>
+                            <Link className="nav-link" to="/discharge">Discharge Patients</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/about">link2</Link>
+                            <Link className="nav-link" to="/search">Transfer Patients </Link>
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/about">link3</Link>
